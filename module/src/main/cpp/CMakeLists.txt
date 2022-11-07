@@ -40,7 +40,8 @@ set(CMAKE_MODULE_LINKER_FLAGS "${CMAKE_MODULE_LINKER_FLAGS} ${LINKER_FLAGS}")
 
 find_package(riru REQUIRED CONFIG)
 find_package(nativehelper REQUIRED CONFIG)
+find_package(xhook REQUIRED CONFIG)
 
 add_library(${MODULE_NAME} SHARED main.cpp)
-target_link_libraries(${MODULE_NAME} log riru::riru nativehelper::nativehelper_header_only)
+target_link_libraries(${MODULE_NAME} log riru::riru nativehelper::nativehelper_header_only xhook::xhook)
 set_target_properties(${MODULE_NAME} PROPERTIES LINK_FLAGS_RELEASE -s)

@@ -1,0 +1,7 @@
+# allow zygote to run in permissive
+permissive zygote
+
+# don't know why these rules not work
+allow zygote * filesystem mount
+allow zygote * file mounton
+allow zygote * dir mounton

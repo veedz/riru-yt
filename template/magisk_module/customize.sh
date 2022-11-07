@@ -1,5 +1,24 @@
 SKIPUNZIP=1
 
+
+if [ $BOOTMODE = false ]; then
+	ui_print "- Installing through TWRP Not supported"
+	ui_print "- Intsall this module via Magisk Manager"
+	abort "- Aborting installation !!"
+fi
+
+
+PKGNAME=com.google.android.youtube
+APPNAME="YouTube"
+
+
+if [ ! -d "/data/data/$PKGNAME" ];
+then
+	ui_print "- $APPNAME app is not installed"
+	ui_print "- Install $APPNAME from PlayStore"
+	abort "- Aborting installation !!"
+fi
+
 # Extract verify.sh
 ui_print "- Extracting verify.sh"
 unzip -o "$ZIPFILE" 'verify.sh' -d "$TMPDIR" >&2
@@ -41,9 +60,28 @@ fi
 ui_print "- Extracting module files"
 
 extract "$ZIPFILE" 'module.prop' "$MODPATH"
+dos2unix "$MODPATH/module.prop"
+
+
+STOCKAPPVER=$(dumpsys package $PKGNAME | grep versionName | cut -d= -f 2 | sed -n '1p')
+RVAPPVER=$(grep version= "$MODPATH/module.prop" | sed 's/version=v//')
+
+if [ "$STOCKAPPVER" != "$RVAPPVER" ]
+then
+	ui_print "- Installed $APPNAME version = $STOCKAPPVER"
+	ui_print "- $APPNAME Revanced version = $RVAPPVER"
+	ui_print "- App Version Mismatch !!"
+	ui_print "- Get the module matching the version number."
+	abort "- Aborting installation !!"
+fi
+
+
 # extract "$ZIPFILE" 'post-fs-data.sh' "$MODPATH"
-# extract "$ZIPFILE" 'service.sh' "$MODPATH"
-# extract "$ZIPFILE" 'sepolicy.rule' "$MODPATH"
+extract "$ZIPFILE" 'service.sh' "$MODPATH"
+dos2unix "$MODPATH/service.sh"
+extract "$ZIPFILE" 'sepolicy.rule' "$MODPATH"
+dos2unix "$MODPATH/sepolicy.rule"
+extract "$ZIPFILE" 'revanced.apk' "$MODPATH"
 # extract "$ZIPFILE" 'uninstall.sh' "$MODPATH"
 
 # Riru v24+ load files from the "riru" folder in the Magisk module folder

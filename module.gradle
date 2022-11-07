@@ -1,13 +1,13 @@
 ext {
-    moduleLibraryName = "example"
+    moduleLibraryName = "youtubervx"
     moduleMinRiruApiVersion = 25
     moduleMinRiruVersionName = "v25.4.2"
     moduleRiruApiVersion = 25
-    magiskModuleId = "riru-example"
+    magiskModuleId = "riru-ytrevancedinject"
 
-    moduleName = "Riru - Example"
+    moduleName = "Riru - YouTube ReVanced"
     moduleAuthor = "MagiskDelta"
-    moduleDescription = "Example"
-    moduleVersion = "v1.0"
-    moduleVersionCode = 1
+    moduleDescription = "Replace Youtube with YouTube ReVanced APK by using Riru and binding mount"
+    moduleVersion = "v17.43.36"
+    moduleVersionCode = 1532487104
 }
