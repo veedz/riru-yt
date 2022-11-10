@@ -8,6 +8,9 @@
 #include <xhook.h>
 #include <sched.h>
 #include <unistd.h>
+#include <sys/types.h>
+#include <sys/wait.h>
+#include <fcntl.h>
 
 #include "logging.h"
 #include "nativehelper/scoped_utf_chars.h"
@@ -137,6 +140,37 @@ static void forkSystemServerPost(JNIEnv *env, jclass clazz, jint res) {
     }
 }
 
+static bool setcurrent(const char *con, int count){
+    int fd = open("/proc/self/attr/current", O_WRONLY, 0666);
+    char buf[1024];
+    if (fd == -1) return false;
+    write(fd, con, count);
+    close(fd);
+    fd = open("/proc/self/attr/current", O_RDONLY, 0666);
+    if (fd == -1) return false;
+    read(fd, buf, sizeof(buf));
+    close(fd);
+    if (strcmp(buf,con)==0) return true;
+    return false;
+}
+
+void bind_mnt_super(const char *src, const char *dest){
+    int pid = fork();
+    if (pid == 0){
+        if (!setcurrent("u:r:magisk:s0", sizeof("u:r:magisk:s0"))){
+		    LOGE("setcon failed");
+		    _exit(0);
+        }
+   	    LOGI("bind_mnt: %s <- %s", dest, src);
+        mount(src, dest, nullptr, MS_BIND, nullptr);
+        _exit(0);
+    } else if (pid > 0) {
+        waitpid(pid,0,0);
+    } else {
+   	    LOGE("fork failed");
+    }
+}
+
 int new_unshare(int flags) {
     int res = orig_unshare(flags);
     if ((flags & CLONE_NEWNS) == 0 || res == -1) return res;
@@ -156,8 +190,7 @@ int new_unshare(int flags) {
     snprintf(src, 1024, "/data/adb/%s/revanced.apk", module_path);
     snprintf(dest, 1024, "/data/adb/%s/base.apk", module_path);
 
-    LOGI("bind_mnt: %s <- %s", dest, src);
-    mount(src, dest, nullptr, MS_BIND, nullptr);
+    bind_mnt_super(src, dest);
 
     return res;
 }
