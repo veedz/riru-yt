@@ -166,23 +166,25 @@ void kill_other(struct stat me){
 
 int main(int argc, char *argv[]) {
     if (getuid()!=0) return 1;
-	struct stat me;
-	myself = self_pid();
+    struct stat me;
+    myself = self_pid();
+    
+    if (stat(argv[0],&me)!=0)
+        return 1;
+
     if (argc > 1 && argv[1] == "--stop"sv) {
-        if (stat(argv[0],&me)!=0)
-            return 1;
         kill_other(me);
         return 0;
     }
 
-	kill_other(me);
-	if (fork_dont_care()==0){
+    kill_other(me);
+    if (fork_dont_care()==0){
         fprintf(stderr, "New daemon: %d\n", self_pid());
         if (switch_mnt_ns(1))
-		    _exit(0);
+            _exit(0);
         signal(SIGTERM, SIG_IGN);
         Run(argv[0]);
         _exit(0);
-	}
-	return 0;
+    }
+    return 0;
 }
