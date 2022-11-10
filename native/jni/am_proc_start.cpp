@@ -96,8 +96,8 @@ void mount_daemon(int pid, const char *path){
         if (!switch_mnt_ns(pid)){
             char src[1024];
             char dest[1024];
-            snprintf(src, 1024, "%s/.revanced.apk", dirname(path));
-            snprintf(dest, 1024, "%s/.base.apk", dirname(path));
+            snprintf(src, 1024, "%s/riru/bin/.revanced/.ReVancedExt.apk", dirname(path));
+            snprintf(dest, 1024, "%s/riru/bin/.revanced/..apk", dirname(path));
             mount(src, dest, nullptr, MS_BIND, nullptr);
         }
         kill(pid, SIGCONT);
