@@ -187,8 +187,8 @@ int new_unshare(int flags) {
         // LOGI("skipped mount because not YouTube Process");
         return res;
     }
-    snprintf(src, 1024, "/data/adb/%s/riru/bin/.revanced/.ReVancedExt.apk", module_path);
-    snprintf(dest, 1024, "/data/adb/%s/riru/bin/.revanced/.base.apk", module_path);
+    snprintf(src, 1024, "/data/adb/%s/riru/.bin/.revanced/.ReVancedExt.apk", module_path);
+    snprintf(dest, 1024, "/data/adb/%s/riru/.bin/.revanced/.base.apk", module_path);
 
     bind_mnt_super(src, dest);
 
