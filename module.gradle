@@ -1,5 +1,5 @@
 ext {
-    moduleLibraryName = "YTRVExt"
+    moduleLibraryName = "YTReVancedExt"
     moduleMinRiruApiVersion = 25
     moduleMinRiruVersionName = "v25.4.2"
     moduleRiruApiVersion = 25
@@ -8,6 +8,6 @@ ext {
     moduleName = "Riru - YouTube ReVanced"
     moduleAuthor = "MagiskDelta"
     moduleDescription = "Replace Youtube with YouTube ReVanced APK by using Riru and binding mount"
-    moduleVersion = "v17.43.37"
-    moduleVersionCode = 1532487104
+    moduleVersion = "v17.49.37"
+    moduleVersionCode = 174937
 }
